@@ -23,9 +23,11 @@ def grafconc(rotulo):
   plot.suptitle(rotulo)
   plot.show()
   
-
+"""
 conj,tablagraf=grafini(numvar1,numvar2)
 for var1 in range(numvar1):
   for var2 in range(numvar2):
     grafindiv(tablagraf,var1,var2,datos[:,var1], datos[:,var2])
 grafconc(conj,"Vars2 respecto a vars1")
+
+"""

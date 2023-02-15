@@ -14,6 +14,7 @@ from scipy import stats
 import numpy as np
 from numpy import array
 import matplotlib.pyplot as plot
+import graf0 as g
 
 def septorch(datos,tipo,donde):
   entradas=[ [col for col in fila[:-1]] for fila in datos]
@@ -123,3 +124,13 @@ salpru=red(tep)
 ep=error(salpru,tsp)
 print("Error de prueba",math.sqrt(ep.item()))
 
+"""
+numvar1=1
+numvar2=2
+
+conj,tablagraf=g.grafini(numvar1,numvar2)
+for var1 in range(numvar1):
+  for var2 in range(numvar2):
+    g.grafindiv(tablagraf,var1,var2,datos[:,var1], datos[:,var2])
+g.grafconc(conj,"Vars2 respecto a vars1")
+"""
