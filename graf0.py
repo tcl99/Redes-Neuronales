@@ -29,6 +29,7 @@ datos= [[float(cada) for cada in linea.strip().split()] for linea in fichdatos.r
 
 numvar1=10
 numvar2=13
+
 conj,tablagraf=grafini(numvar1,numvar2)
 for var1 in range(numvar1):
   for var2 in range(numvar2):

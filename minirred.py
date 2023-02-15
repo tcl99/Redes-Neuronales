@@ -1,3 +1,5 @@
+import torch
+import torch.nn as nn
 class Transforma1D(nn.Module):
     """
 Módulo consistente en varias minirredes en paralelo, cada una trabajando con una entrada y concatenando sus salidas
@@ -6,6 +8,7 @@ Módulo consistente en varias minirredes en paralelo, cada una trabajando con un
         #ramas son los bloques separados que actúan
         #cada bloque es a su vez una secuencia
         super().__init__()
+        #Representa la red de trozos de red para cada variable del modelo lineal generalizado
         self.ramas = nn.ModuleList([nn.Sequential(nn.Linear(1, numinter),nn.Tanh(),nn.Linear(numinter, 1))]*numentradas)
 
     def forward(self, x):
