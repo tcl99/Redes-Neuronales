@@ -9,6 +9,10 @@ import numpy as np
 from numpy import array
 import matplotlib.pyplot as plot
 
+import graf0 as g
+
+grafico = g.grafini(2,1)
+
 var=1
 print(var)
 print("lol")
