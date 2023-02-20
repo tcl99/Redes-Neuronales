@@ -32,4 +32,6 @@ Con la red neuronal entre 0,3 y 0,4
 En el modelo lineal generalizado, las variables son transformadas, estas funciones se pueden aplicar con redes neuronales a cada variable
 MODELO 2
 
+Red Ocultos CortePorValidacion LearningRate Ajuste/Validacion/Prueba ErrorEstimado
+
 REPETIR VARIAS VECES CADA PRUEBA
