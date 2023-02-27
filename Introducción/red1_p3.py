@@ -1,7 +1,7 @@
 #!/usr/bin/python3
 # -*- coding: utf-8 -*-
 """
-Perceptrón para estimar precio de viviendas. 
+PerceptrÃ³n para estimar precio de viviendas. 
 """
 
 import math
@@ -15,13 +15,14 @@ import numpy as np
 from numpy import array
 import matplotlib.pyplot as plot
 
-var_porazar=1
-var_muesajuste=1
-var_muesval=1
-var_ocultos=1
-var_lr=1
-var_error=1
+var_muesajuste=0.6
+var_muesval=0.2
+#Recordar q hay3 grupos, si suma 1 queda 0 para el de comprobar
+var_ocultos=15
+var_error=nn.MSELoss()
+var_lr=0.005
 var_nvalfal=5
+
 
 def septorch(datos,tipo,donde):
   entradas=[ [col for col in fila[:-1]] for fila in datos]
@@ -63,7 +64,7 @@ def grafconc(x,rotulo):
   
 def procesacapas(red,previo,sini):
   salcapa=[]
-  guardar=sini#La primera es la salida de lo lineal, que no interesa. Por ese patrón, irán alternando. 
+  guardar=sini#La primera es la salida de lo lineal, que no interesa. Por ese patrÃ³n, irÃ¡n alternando. 
   for capa in red.children():
     previo=capa(previo)
     if guardar:
@@ -101,19 +102,19 @@ tea,tsa,ea,sa=septorch(dataj,dtype,device)
 tev,tsv,ev,sv=septorch(datval,dtype,device)
 tep,tsp,ep,sp=septorch(datpru,dtype,device)
 
-#Si interesa la referencia de regresión lineal, Torch no la tiene directamente, pero puedes hacer una red enteramente lineal y ajustarla
+#Si interesa la referencia de regresiÃ³n lineal, Torch no la tiene directamente, pero puedes hacer una red enteramente lineal y ajustarla
 
 
 #definir red
 ocultos=var_ocultos
 red=nn.Sequential(
     nn.Linear(numentradas, ocultos),
-    nn.Tanh(),#Para un modelo lineal, suprimirías esto. También puedes poner otras funciones (HardTanh, Sigmoid, ReLU)
+    nn.Tanh(),#Para un modelo lineal, suprimirÃ­as esto. TambiÃ©n puedes poner otras funciones (HardTanh, Sigmoid, ReLU)
     nn.Linear(ocultos, 1),
 )
 #).cuda(device)
 #definir error a optimizar
-error = nn. ... #MSELoss L1Loss SmoothL1Loss
+error = var_error #MSELoss L1Loss SmoothL1Loss nn.()
 #definir algoritmo de ajuste
 ajuste=torch.optim.LBFGS(red.parameters(),lr=var_lr,max_iter=50,history_size=10)
 
@@ -124,7 +125,7 @@ def evalua():
         e = error(s, tsa)
         e.backward()
         return e
-print ("Iteración","Error de ajuste","Error de validación")
+print ("IteraciÃ³n","Error de ajuste","Error de validaciÃ³n")
 for it in range(100): # Calcula salidas 
   ea=evalua()
   salval = red(tev)
@@ -147,18 +148,16 @@ salpru=red(tep)
 ep=error(salpru,tsp)
 print("Error de prueba",math.sqrt(ep.item()))
 
-###Análisis adicionales
+###AnÃ¡lisis adicionales
 ##Derivadas respecto a las entradas
-#realiza todas las relaciones con las dervidas que nos indica comose modifica el precio segun con que variable
 for salida in salpru:
   salida.backward(retain_graph=True)
 funanal={'pesini':grafini,'pescada':grafindiv,'pesfin':grafconc,'hinton':grafhintcada}
 numvartot=tep.shape[1]
-#Sacamos en pantalla las medias y las desviaciones típicas
+#Sacamos en pantalla las medias y las desviaciones tÃ­picas
 dermed=tep.grad.numpy().mean(axis=0)
 print ("Derivadas medias",dermed)
-print ("Desviación típica de derivadas",tep.grad.numpy().std(axis=0)) 
-#Cuando mas separado de 0, menos lineal es(la drerivada de unalineal es 0)
+print ("DesviaciÃ³n tÃ­pica de derivadas",tep.grad.numpy().std(axis=0))
 sal1,sal2=funanal['pesini'](numvartot,numvartot+1)
 for vardev in range(numvartot):
   for var in range(numvartot):
@@ -170,12 +169,10 @@ funanal['pesfin'](sal1,"Derivadas respecto a entradas frente a entradas")
 previo=tep
 salcapa=procesacapas(red,previo,False)
 #salcapa.pop() Si hubiera que quitar la de salida
-#Graficarlo respecto a variables si es manejable. Si no, simplemente sacar las dependencias procesador/variable más significativas
+#Graficarlo respecto a variables si es manejable. Si no, simplemente sacar las dependencias procesador/variable mÃ¡s significativas
 for capa in salcapa:
-  #Sacar varianza y mostrar los que la tengan pequeña
+  #Sacar varianza y mostrar los que la tengan pequeÃ±a
   varian=capa.var()
-  #LA varianza muestra lo que varía un procesador, si no varía, es que no influye mucho, por lo que incluso
-  #se podría desestimar
   inutiles=varian<0.15
   if len(varian[inutiles])>0:
     print ("Procesadores poco activos: ",inutiles.nonzero())
@@ -186,11 +183,11 @@ for capa in salcapa:
       funanal['pescada'](sal1,sal2,proc,var,tep[:,var].detach().numpy(), capa[:,proc].detach().numpy())
     funanal['pescada'](sal1,sal2,proc,numvartot,tsp.detach().numpy().squeeze(), capa[:,proc].detach().numpy())
   funanal['pesfin'](sal1,"Procesadores frente a variables")
-##Mostrar pesos. Cada procesador un diagrama de barras respecto a las variables. Si son muchos, indicar sólo los más significativos
-tienepesos=True#La primera es la salida de lo lineal, que tiene pesos. Por ese patrón, irán alternandoLa de función de activación, no. Si el patrón se mantiene, irán alternando
+##Mostrar pesos. Cada procesador un diagrama de barras respecto a las variables. Si son muchos, indicar sÃ³lo los mÃ¡s significativos
+tienepesos=True#La primera es la salida de lo lineal, que tiene pesos. Por ese patrÃ³n, irÃ¡n alternandoLa de funciÃ³n de activaciÃ³n, no. Si el patrÃ³n se mantiene, irÃ¡n alternando
 for capa in red.children():
   if tienepesos:
     pesos=capa.parameters()#procesadores en filas, variables en columnas
-    p= next(pesos)#Poner que sólo interesan capas salternas
+    p= next(pesos)#Poner que sÃ³lo interesan capas salternas
     funanal['hinton'](p.detach().numpy())
   tienepesos=not tienepesos
