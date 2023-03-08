@@ -93,7 +93,8 @@ for v in range(numestim):
   error = nn.SmoothL1Loss()
 
   #definir algoritmo de ajuste
-  ajuste=torch.optim.Rprop(red.parameters(), lr=0.01, etas=(0.5, 1.2), step_sizes=(1e-06, 50)) # Siguiendo gradiente a paso fijo (factores de aumento y disminución y pasos mínimo y máximo)
+  #ajuste=torch.optim.Rprop(red.parameters(), lr=0.01, etas=(0.5, 1.2), step_sizes=(1e-06, 50)) # Siguiendo gradiente a paso fijo (factores de aumento y disminución y pasos mínimo y máximo)
+  ajuste=torch.optim.LBFGS(red.parameters(),lr=0.01,max_iter=50,history_size=10) #Cuasi-newton
 
   nvalfal=0
   def evalua():
