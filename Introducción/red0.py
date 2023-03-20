@@ -25,8 +25,8 @@ def septorch(datos,tipo,donde):
   return redent,redsal,entradas,salidas
 
 dtype = torch.float
-device = torch.device("cpu")
-#device = torch.device("cuda:0") 
+#device = torch.device("cpu")
+device = torch.device("cuda:0") 
 
 #Cargamos los datos, todos
 fichdatos=open('casas.trn','r')
