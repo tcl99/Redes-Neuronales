@@ -12,3 +12,7 @@ ANCHO- n pesos
 SALTO- distancia entre entradas de procesadores
 
 ## VARIACIONES
+
+PRUEBA Y ERROR
+
+SE utiliza GOGE FUERTE Y PODA
